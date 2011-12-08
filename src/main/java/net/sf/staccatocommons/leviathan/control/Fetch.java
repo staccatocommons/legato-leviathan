@@ -12,6 +12,14 @@ import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamSource;
 
+import net.sf.staccatocommons.defs.function.Function;
+import net.sf.staccatocommons.lang.SoftException;
+import net.sf.staccatocommons.lang.function.AbstractFunction;
+import net.sf.staccatocommons.leviathan.DocumentContentTypes;
+import net.sf.staccatocommons.restrictions.Constant;
+import net.sf.staccatocommons.restrictions.check.NonNull;
+import net.sf.staccatocommons.restrictions.processing.EnforceRestrictions;
+
 import org.apache.commons.lang.reflect.FieldUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.oxm.Unmarshaller;
@@ -21,20 +29,12 @@ import ar.com.zauber.commons.web.transformation.processors.DocumentProvider;
 import ar.com.zauber.leviathan.api.URIFetcherHttpResponse;
 import ar.com.zauber.leviathan.api.URIFetcherResponse;
 
-import net.sf.staccatocommons.defs.function.Function;
-import net.sf.staccatocommons.lang.SoftException;
-import net.sf.staccatocommons.lang.function.AbstractFunction;
-import net.sf.staccatocommons.leviathan.DocumentContentTypes;
-import net.sf.staccatocommons.restrictions.Constant;
-import net.sf.staccatocommons.restrictions.check.NonNull;
-import net.sf.staccatocommons.restrictions.processing.ForceRestrictions;
-
 public class Fetch {
 
   public static <A> Function<Document, A> parse(final Unmarshaller unmarshaller, Class<A> clazz) {
     return new AbstractFunction<Document, A>() {
       @Override
-      @ForceRestrictions
+      @EnforceRestrictions
       public A apply(@NonNull Document arg0) {
         try {
           return (A) unmarshaller.unmarshal(new DOMSource(arg0));
