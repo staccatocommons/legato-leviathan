@@ -32,15 +32,11 @@ import ar.com.zauber.leviathan.api.URIFetcherResponse;
 public class Fetch {
 
   public static <A> Function<Document, A> parse(final Unmarshaller unmarshaller, Class<A> clazz) {
-    return new AbstractFunction<Document, A>() {
+    return new AbstractFunction.Soft<Document, A>() {
       @Override
       @EnforceRestrictions
-      public A apply(@NonNull Document arg0) {
-        try {
-          return (A) unmarshaller.unmarshal(new DOMSource(arg0));
-        } catch (Exception e) {
-          throw SoftException.soften(e);
-        }
+      public A softApply(@NonNull Document arg0) throws Exception {
+        return (A) unmarshaller.unmarshal(new DOMSource(arg0));
       }
     };
   }
@@ -52,13 +48,9 @@ public class Fetch {
 
   @Constant
   public static Function<URIFetcherResponse, String> httpResponseContent() {
-    return httpResponse().then(new AbstractFunction<URIFetcherHttpResponse, String>() {
-      public String apply(URIFetcherHttpResponse arg0) {
-        try {
-          return (String) FieldUtils.readDeclaredField(arg0, "content", true);
-        } catch (IllegalAccessException e) {
-          throw SoftException.soften(e);
-        }
+    return httpResponse().then(new AbstractFunction.Soft<URIFetcherHttpResponse, String>() {
+      public String softApply(URIFetcherHttpResponse arg0) throws Throwable {
+        return (String) FieldUtils.readDeclaredField(arg0, "content", true);
       }
     });
   }
@@ -89,20 +81,15 @@ public class Fetch {
       final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
       final Transformer transformer = TransformerFactory.newInstance().newTransformer(
         new StreamSource(resource.getInputStream()));
-      return new AbstractFunction<Document, Document>() {
-        public Document apply(Document arg0) {
-          try {
-            Document document = documentBuilderFactory.newDocumentBuilder().newDocument();
-            transformer.transform(new DOMSource(arg0), new DOMResult(document));
-            return document;
-          } catch (Exception e) {
-            throw SoftException.soften(e);
-          }
+      return new AbstractFunction.Soft<Document, Document>() {
+        public Document softApply(Document arg0) throws Exception {
+          Document document = documentBuilderFactory.newDocumentBuilder().newDocument();
+          transformer.transform(new DOMSource(arg0), new DOMResult(document));
+          return document;
         }
       };
     } catch (Exception e) {
       throw SoftException.soften(e);
     }
-
   }
 }
