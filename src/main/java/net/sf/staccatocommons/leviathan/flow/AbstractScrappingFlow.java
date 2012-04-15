@@ -18,19 +18,23 @@ import org.springframework.oxm.Unmarshaller;
 import org.w3c.dom.Document;
 
 import ar.com.zauber.leviathan.api.AsyncUriFetcher;
+import ar.com.zauber.leviathan.api.URIFetcher;
 import ar.com.zauber.leviathan.api.URIFetcherResponse;
 
 public abstract class AbstractScrappingFlow implements Thunk<Monad<Void>> {
 
   private final AsyncUriFetcher fetcher;
+  private final URIFetcher uriFetcher;
   private final Unmarshaller unmarshaller;
 
-  public AbstractScrappingFlow(AsyncUriFetcher fetcher, Unmarshaller unmarshaller) {
-    this.fetcher = fetcher;
-    this.unmarshaller = unmarshaller;
-  }
 
-  protected abstract URI baseUri();
+  public AbstractScrappingFlow(AsyncUriFetcher fetcher, URIFetcher uriFetcher, Unmarshaller unmarshaller) {
+   this.fetcher = fetcher;
+   this.uriFetcher = uriFetcher;
+   this.unmarshaller = unmarshaller;
+}
+
+protected abstract URI baseUri();
 
   protected abstract Monad<?> entryPoint();
 
@@ -43,7 +47,7 @@ public abstract class AbstractScrappingFlow implements Thunk<Monad<Void>> {
   }
 
   protected final Monad<URIFetcherResponse> fetch(FetchMethod method) {
-    return Monads.from(new FetchMonadicValue(method, fetcher));
+    return Monads.from(new FetchMonadicValue(method, fetcher, uriFetcher));
   }
 
   protected final URI resolve(String relative) {

@@ -6,7 +6,7 @@
 	<version>1.0-SNAPSHOT</version>
 
 	<properties>
-		<leviathan.version>0.8</leviathan.version>
+		<leviathan.version>0.9-SNAPSHOT</leviathan.version>
 		<staccatocommons.version>2.2</staccatocommons.version>
 		<zaubercommons.version>3.43</zaubercommons.version>
 	</properties>
