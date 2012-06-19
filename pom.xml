@@ -11,8 +11,8 @@
    </parent>
 
 	<properties>
-		<leviathan.version>0.9</leviathan.version>
-		<staccatocommons.version>2.2</staccatocommons.version>
+		<leviathan.version>1.0-SNAPSHOT</leviathan.version>
+		<staccatocommons.version>2.3-SNAPSHOT</staccatocommons.version>
 		<zaubercommons.version>3.43</zaubercommons.version>
 	</properties>
 
