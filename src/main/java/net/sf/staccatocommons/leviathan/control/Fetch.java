@@ -50,7 +50,7 @@ public class Fetch {
   public static Function<URIFetcherResponse, String> httpResponseContent() {
     return httpResponse().then(new AbstractFunction.Soft<URIFetcherHttpResponse, String>() {
       public String softApply(URIFetcherHttpResponse arg0) throws Throwable {
-        return (String) FieldUtils.readDeclaredField(arg0, "content", true);
+        return arg0.getContentAsString();
       }
     });
   }
